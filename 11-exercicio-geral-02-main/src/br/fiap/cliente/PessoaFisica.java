@@ -17,6 +17,7 @@ public class PessoaFisica extends Cliente{
 
     @Override
     public String getIdentificador() {
+
         return this.cpf;
     }
 

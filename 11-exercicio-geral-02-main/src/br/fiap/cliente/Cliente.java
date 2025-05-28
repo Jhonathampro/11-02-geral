@@ -15,7 +15,7 @@ public abstract class Cliente {
     public String toString() {
         String aux = "";
         aux += "Nome: " + nome + "\n";
-        aux += "Contato: " + contato + "\n";
+        aux += "Contato1: " + contato + "\n";
         return aux;
     }
 

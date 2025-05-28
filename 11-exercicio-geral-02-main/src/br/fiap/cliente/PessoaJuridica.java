@@ -13,6 +13,14 @@ public class PessoaJuridica extends Cliente implements Desconto {
     }
 
     @Override
+    public String toString() {
+        String aux = super.toString();
+        aux += " CPJ: " + cnpj + "\n";
+        return aux;
+
+    }
+
+    @Override
     public String getIdentificador() {
         return this.cnpj;
     }

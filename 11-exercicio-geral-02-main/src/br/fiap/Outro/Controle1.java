@@ -1,25 +1,26 @@
-package br.fiap.controle;
+package br.fiap.Outro;
+
 import br.fiap.assento.Assento;
 import br.fiap.cliente.Cliente;
 import br.fiap.cliente.PessoaFisica;
 import br.fiap.cliente.PessoaJuridica;
 import br.fiap.reserva.Reserva;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static java.lang.Integer.parseInt;
-import static javax.swing.JOptionPane.*;
+import static javax.swing.JOptionPane.showInputDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
 
-public class Controle {
+public class Controle1 {
 
     private static List<Cliente> listaClientes = new ArrayList<>();
     private static List<Assento> listaAssento = new ArrayList<>();
     private List<Reserva> listaReserva = new ArrayList<>();
     private Reserva reserva;
-    int verificador[];
+
 
 
 
@@ -37,14 +38,6 @@ public class Controle {
             listaAssento.add(new Assento(i));
         }
     }
-
-    public Controle(){
-        Random rd = new Random();
-        Cliente cliente = listaClientes.get(rd.nextInt(listaClientes.size()));
-         verificador = new int[listaAssento.size()];
-          //reserva = new Reserva(cliente, );
-    }
-
 
 
     public void menu() {
@@ -75,14 +68,26 @@ public class Controle {
         }
     }
 
-    private void cancelar() { }
+    private void cancelar() {
+        String id;
+      id =  showInputDialog("Informe o indentificador para calcelar a reserva");
+        for(Reserva reserva : listaReserva) {
+            if (reserva.getCliente().getIdentificador().equalsIgnoreCase(id)) {
+               listaReserva.remove(reserva);
+
+                return;
+
+            }
+        }
+    }
 
     private void pesquisar() {
         String indentificador = showInputDialog("CPF/CNPF para pesquisa ");
         for(Reserva reserva : listaReserva){
             if (reserva.getCliente().getIdentificador().equalsIgnoreCase(indentificador)) {
-                showMessageDialog(null, reserva);
+                showMessageDialog(null, reserva.toString());
                 return;
+
             }
 
         }
@@ -91,12 +96,14 @@ public class Controle {
 
     private void reservar() {
         int cadeira;
-
+        Assento assentoVerificacao = null;
         boolean encontrado = false;
+
         cadeira = parseInt(showInputDialog("Escolha o seu assento"));
 
         for(Assento assento : listaAssento) {
             if (assento.getNumero() == cadeira) {
+                assentoVerificacao = assento;
                 encontrado = true;
 
                break;
@@ -104,33 +111,22 @@ public class Controle {
             }
 
         if (!encontrado) {
-          showMessageDialog(null, "Esse assento não existe.");
-            return;
+            showMessageDialog(null, "Esse assento não existe.");
+        } else {
+            if (assentoVerificacao.isDisponivel() == true){
+                  assentoVerificacao.setDisponivel(false);
+                  assentoVerificacao.setNumero(cadeira);
+                showMessageDialog(null, "Assento reservado com sucesso.");
+                double valor = 100;
+                Random rd = new Random();
+                Cliente cliente = listaClientes.get(rd.nextInt(listaClientes.size()));
+                reserva = new Reserva(cliente, assentoVerificacao, valor);
+                listaReserva.add(reserva);
+
+            } else {
+                showMessageDialog(null, "Assento já está ocupado.");
+            }
         }
-
-             boolean ocupado = false;
-                // Verifica se o assento já está ocupado
-                for (int i = 0; i < verificador.length; i++) {
-                    if (verificador[i] == cadeira){
-                        ocupado = true;
-                        break;
-                    }
-                }
-
-                if (ocupado) {
-                    showMessageDialog(null, "Esse assento está ocupado");
-                } else {
-                    // Encontra o primeiro espaço vazio para registrar a cadeira
-                    for (int i = 0; i < verificador.length; i++) {
-                        if (verificador[i] == 0) { // 0 representa "vazio"
-                            verificador[i] = cadeira;
-                            showMessageDialog(null, "Assento disponível");
-
-                            break;
-                        }
-                    }
-                }
-
 
     }
 

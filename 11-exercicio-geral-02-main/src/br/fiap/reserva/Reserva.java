@@ -17,6 +17,16 @@ public class Reserva {
         aplicarDesconto();
     }
 
+    @Override
+    public String toString() {
+        String aux = "";
+        aux += "Cliente: " + cliente;
+        aux += "Assento: " + assento.getNumero();
+        aux += "Valor: " + valorOriginal;
+        return aux;
+
+    }
+
     private void aplicarDesconto() {
         if(cliente instanceof Desconto) {
             valorFinal = ((Desconto) cliente).aplicarDesconto(valorOriginal);
